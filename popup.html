@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Conversation Finder</title>
+  <style>
+    body {
+      width: 300px;
+      padding: 10px;
+      font-family: Arial, sans-serif;
+    }
+    input {
+      width: 100%;
+      padding: 8px;
+      margin: 5px 0;
+    }
+    button {
+      padding: 10px;
+      width: 100%;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    #results {
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h3>Search Conversations</h3>
+  <input type="text" id="searchQuery" placeholder="Enter conversation name..." />
+  <button id="searchButton">Search</button> <!-- No inline event handler -->
+
+  <h3>Save Current Conversation</h3>
+  <input type="text" id="conversationName" placeholder="Enter name for conversation..." />
+  <button id="saveButton">Save</button> <!-- No inline event handler -->
+
+  <div id="results"></div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
