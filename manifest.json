@@ -3,13 +3,24 @@
   "name": "ChatGPT Conversation Finder",
   "version": "1.1",
   "description": "Search for specific ChatGPT conversations by name and automatically track new ones.",
-  "permissions": ["activeTab", "tabs", "webNavigation", "storage", "scripting"],
-  "host_permissions": ["https://chatgpt.com/*"],
+  "permissions": [
+    "activeTab",
+    "tabs",
+    "webNavigation",
+    "storage",
+    "scripting",
+    "webRequest",
+    "webRequestBlocking"
+  ],
+  "host_permissions": ["https://chatgpt.com/*", "https://chatgpt.com/c/*"],
+  "background": {
+    "service_worker": "frontend/background.js"
+  },
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'"
+  },
   "action": {
     "default_popup": "frontend/popup.html"
-  },
-  "background": {
-    "service_worker": "frontend/notify.js"
   },
   "icons": {
     "16": "images/icon16.png",
@@ -19,7 +30,7 @@
   "content_scripts": [
     {
       "matches": ["https://chatgpt.com/", "https://chatgpt.com/c/*"],
-      "js": ["frontend/content.bundle.js"],
+      "js": ["./dist/content.bundle.js"],
       "run_at": "document_idle",
       "type": "module"
     }
