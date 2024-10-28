@@ -21,21 +21,23 @@ const logNavigation = (url) => {
 
       if (requireText === 'New chat') {
         // If title is "New chat", wait and check again
-        setTimeout(checkTitle, 1000); // Check again after 1 second
+        setTimeout(checkTitle, 10000); // Check again after 1 second
       } else {
         // Once title changes, proceed to log
-        title = requireText;
-        alert('Do you want to save this conversation?');
-        
+        title = requireText;        
         console.log('Logging navigation:');
         console.log('Title:', title);
         console.log('URL:', url);
 
-        const ngrokUrl = 'https://ed47-152-59-33-28.ngrok-free.app';
+        const ngrokUrl = 'https://2963-152-59-32-19.ngrok-free.app';
+        
+        const data = { title, url }; // Make sure this is defined and valid
+        console.log('Sending data:', JSON.stringify(data));
+
         fetch(`${ngrokUrl}/api/v1/conversations/addConversation`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ title, url }),
+          body: JSON.stringify(data),
         })
           .then((response) => {
             if (!response.ok)

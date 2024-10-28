@@ -1,43 +1,125 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Conversation Finder</title>
-  <style>
-    body {
-      width: 300px;
-      padding: 10px;
-      font-family: Arial, sans-serif;
-    }
-    input {
-      width: 100%;
-      padding: 8px;
-      margin: 5px 0;
-    }
-    button {
-      padding: 10px;
-      width: 100%;
-      background-color: #007bff;
-      color: white;
-      border: none;
-      cursor: pointer;
-    }
-    button:hover {
-      background-color: #0056b3;
-    }
-    #results {
-      margin-top: 10px;
-    }
-  </style>
-</head>
-<body>
-  <h3>Search Conversations</h3>
-  <input type="text" id="searchQuery" placeholder="Enter conversation name..." />
-  <button id="searchButton">Search</button> <!-- No inline event handler -->
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Conversation Finder</title>
+    <style>
+      body {
+        max-width: 800px;
+        margin: auto;
+        padding: 20px;
+        font-family: Arial, sans-serif;
+        background-color: #121212; /* Dark background */
+        color: #e0e0e0; /* Light text color */
+      }
 
-  <div id="results"></div>
+      h3 {
+        text-align: center;
+        color: #bb86fc; /* Light purple for heading */
+        margin-bottom: 25px;
+        font-size: 28px;
+      }
 
-  <script src="popup.js"></script>
-</body>
+      .input-group {
+        display: flex;
+        align-items: stretch; /* Ensure buttons and inputs stretch equally */
+        gap: 20px;
+      }
+
+      .input-wrapper {
+        flex: 1;
+        display: flex;
+        border: 2px solid #333; /* Darker border */
+        border-radius: 6px;
+        overflow: hidden;
+      }
+
+      input {
+        flex: 1;
+        padding: 15px;
+        border: none;
+        outline: none;
+        font-size: 18px;
+        background-color: #1e1e1e; /* Dark input background */
+        color: #e0e0e0; /* Light text color for input */
+      }
+
+      button {
+        padding: 15px;
+        background-color: #bb86fc; /* Default background color */
+        color: white; /* Text color */
+        border: none; /* No border */
+        border-radius: 6px; /* Rounded corners */
+        font-size: 18px; /* Font size for buttons */
+        cursor: pointer; /* Pointer cursor on hover */
+        transition: background-color 0.3s ease, transform 0.2s ease; /* Smooth transition for hover effect */
+      }
+
+      button:hover {
+        background-color: #9b59b6; /* Darker purple on hover */
+        transform: translateY(-2px); /* Slight lift effect on hover */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
+      }
+
+      #results {
+        margin-top: 25px;
+        padding: 15px;
+        background-color: #1e1e1e; /* Dark background for results */
+        border: 1px solid #333; /* Darker border for results */
+        border-radius: 6px;
+      }
+
+      #results p {
+        margin: 12px 0;
+        padding: 12px;
+        background-color: #2a2a2a; /* Slightly lighter dark background for result items */
+        border-radius: 6px;
+      }
+
+      .error {
+        color: #ff5252; /* Red color for error messages */
+      }
+
+      .login-button {
+        margin-bottom: 20px; /* Space below the login button */
+        width: 100%; /* Full width for the login button */
+        font-size: 18px; /* Font size for the login button */
+        cursor: pointer; /* Cursor pointer for better UX */
+        transition: bg-color 0.3s; /* Transition effect for hover */
+        background-color: #bb86fc; /* Background color for login button */
+        color: white; /* Text color */
+        border: none; /* No border */
+        border-radius: 0.5em; /* Rounded corners */
+      }
+
+      .login-button:hover {
+        background-color: #9b59b6; /* Darker purple on hover for login button */
+      }
+    </style>
+  </head>
+  <body>
+    <div class="card">
+      <h3>Search Conversations</h3>
+
+      <!-- Login Button -->
+      <button class="login-button" id="loginButton">Login</button>
+
+      <div class="input-group">
+        <div class="input-wrapper">
+          <input
+            type="text"
+            placeholder="Enter conversation name...."
+            id="searchQuery"
+          />
+        </div>
+        <button id="searchButton">Search</button>
+      </div>
+
+      <div id="results"></div>
+    </div>
+
+    <script src="popup.js">
+    </script>
+  </body>
 </html>

@@ -1,4 +1,3 @@
-import mongoose from 'mongoose';
 import { Conversation } from '../models/Conversation.models.js';
 import { ApiError } from '../utils/ApiErrors.js';
 import { asyncHandler } from '../utils/asyncHandler.js';
@@ -7,9 +6,22 @@ import Fuse from 'fuse.js';
 
 const addConversations = asyncHandler(async (req, res, next) => {
   try {
-    const { title, url } = req.body; // Get the data from the request body
+    const { title, url } = req.body;
 
-    // Check if required fields are present
+    // Skip specific titles or URLs
+    if (title === 'Chatgpt' || url === 'https://chatgpt.com') {
+      return res
+        .status(200)
+        .json(
+          new ApiResponse(
+            200,
+            'Conversation with this title or URL is not allowed',
+            null
+          )
+        );
+    }
+
+    // Validate required fields
     if (!title || !url) {
       return res
         .status(400)
@@ -19,95 +31,89 @@ const addConversations = asyncHandler(async (req, res, next) => {
     console.log('Received Title:', title);
     console.log('Received URL:', url);
 
-    // Here you can add logic to save the data to a database if needed
-
-    // Send a response back with the received data
-    res
-      .status(200)
-      .json(
-        new ApiResponse(200, 'Thank you, I am working now!!!', { title, url })
-      );
-  } catch (error) {
-    next(new ApiError(500, 'Failed to fetch')); // Pass error to next middleware
-  }
-});
-
-
-const findConversations = asyncHandler(async (req, res, _) => {
-  const userId = req.user?._id;
-  const { query: searchQuery } = req.body; // Extract 'query' from the request body
-
-  try {
-    // Check if user is logged in
-    if (!userId) {
-      throw new ApiError(400, 'User is not logged in!');
-    }
-
-    // Ensure that a search query is provided
-    if (!searchQuery) {
-      throw new ApiError(400, 'You must enter a search query!');
-    }
-
-    // Attempt to find a conversation that matches the user's exact search query
-    const foundConversation = await Conversation.findOne({
-      addedBy: userId,
-      conversation: searchQuery, // Assuming 'conversation' is a field in the Conversation model
+    // Check if conversation already exists
+    const existedConversation = await Conversation.findOne({
+      conversationTitle: title,
     });
-
-    // If an exact match is found, return it
-    if (foundConversation) {
+    if (existedConversation) {
       return res
         .status(200)
         .json(
           new ApiResponse(
             200,
-            'Conversation fetched successfully!',
-            foundConversation
+            'You already have this conversation earlier!',
+            existedConversation
           )
         );
     }
+    
+    const createdConversation = await Conversation.create({
+      conversationTitle: title,
+      link: url,
+    });
 
-    // If no exact match, perform a fuzzy search
-    const options = {
-      includeScore: true,
-      threshold: 0.4, // Adjust the match threshold
-      keys: ['conversation'], // Adjust the field to search in (make sure this matches your model field)
-    };
-
-    // Fetch all conversations (you might want to limit or paginate this in production)
-    const allConversations = await Conversation.find({ addedBy: userId });
-    const fuse = new Fuse(allConversations, options);
-
-    // Perform the fuzzy search
-    const result = fuse.search(searchQuery);
-
-    // If no results from the fuzzy search, return an appropriate message
-    if (result.length === 0) {
-      throw new ApiError(400, 'No results found! Try a different keyword.');
+    if (!createdConversation) {
+      return next(new ApiError(500, 'Error saving the conversation'));
     }
 
-    // Map the search result items
-    const matches = result.map((item) => item.item);
-
-    // Return the fuzzy search results
+    // Successfully created
     res
-      .status(200)
+      .status(201)
       .json(
         new ApiResponse(
-          200,
-          'Here are some matching conversations based on your query.',
-          matches
+          201,
+          'Conversation added successfully',
+          createdConversation
         )
       );
   } catch (error) {
-    // Handle any errors during the process
-    res
-      .status(500)
-      .json(
-        new ApiResponse(500, 'Error finding the conversations.', error)
-      );
+    console.error('Error details:', error); // Log error details
+    next(new ApiError(500, 'Failed to add conversation')); // Pass error to middleware
   }
 });
 
+const findConversations = asyncHandler(async (req, res) => {
+  const userId = req.user?._id;
+  const { query: searchQuery } = req.body;
+
+  try {
+    if (!userId) {
+      throw new ApiError(401, 'User is not logged in!');
+    }
+
+    if (!searchQuery) {
+      throw new ApiError(400, 'You must enter a search query!');
+    }
+
+    const foundConversation = await Conversation.findOne({
+      addedBy: userId,
+      conversation: searchQuery,
+    });
+
+    if (foundConversation) {
+      return res.status(200).json(new ApiResponse(200, 'Conversation fetched successfully!', foundConversation));
+    }
+
+    const options = {
+      includeScore: true,
+      threshold: 0.4,
+      keys: ['conversation'],
+    };
+
+    const allConversations = await Conversation.find({ addedBy: userId });
+    const fuse = new Fuse(allConversations, options);
+    const result = fuse.search(searchQuery);
+
+    if (result.length === 0) {
+      throw new ApiError(404, 'No results found! Try a different keyword.');
+    }
+
+    const matches = result.map(item => item.item);
+
+    res.status(200).json(new ApiResponse(200, 'Here are some matching conversations based on your query.', matches));
+  } catch (error) {
+    res.status(500).json(new ApiResponse(500, 'Error finding the conversations.', error));
+  }
+});
 
 export { findConversations, addConversations };

@@ -1,84 +1,57 @@
-chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  if (request.action === 'logNavigation') {
-    console.log('Navigation logged:', request.url, 'at', request.timestamp);
-    sendResponse({ status: 'received' });
-  }
+
+document.getElementById('loginButton').addEventListener('click', function () {
+  window.open('http://localhost:3001/', '_blank')
 });
 
-document
-  .getElementById('saveButton')
-  .addEventListener('click', saveConversation);
+// Search button functionality
 document
   .getElementById('searchButton')
   .addEventListener('click', searchConversation);
 
-// Function to save the current conversation
-async function saveConversation() {
-  const conversationName = document.getElementById('conversationName').value;
-  const currentUrl = window.location.href; // Get current URL
-
-  console.log('Saving conversation:', conversationName, currentUrl); // Debugging line
-
-  if (!conversationName) {
-    alert('Please enter a name for the conversation.');
-    return;
-  }
-
-  const response = await fetch('http://localhost:3000/conversations', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ name: conversationName, link: currentUrl }),
-  });
-
-  if (response.ok) {
-    alert('Conversation saved successfully!');
-    document.getElementById('conversationName').value = ''; // Clear input field
-  } else {
-    const error = await response.json(); // Get error message from response
-    alert('Failed to save conversation: ' + error.error);
-  }
-}
-
-// Function to search for a conversation
 async function searchConversation() {
   const searchQuery = document.getElementById('searchQuery').value;
-
-  console.log('Searching for conversation:', searchQuery); // Debugging line
 
   if (!searchQuery) {
     alert('Please enter a search term.');
     return;
   }
 
-  const response = await fetch(
-    `http://localhost:3000/conversations/search?name=${encodeURIComponent(
-      searchQuery
-    )}`
-  );
-
-  if (response.ok) {
-    const result = await response.json(); // Get the response
-    displayResults(result); // Pass the result to displayResults
-  } else {
-    alert('Failed to search conversations.');
+  try {
+    const response = await fetch(
+      `http://localhost:3000/conversations/search?name=${encodeURIComponent(
+        searchQuery
+      )}`
+    );
+    if (response.ok) {
+      const result = await response.json();
+      displayResults(result);
+    } else {
+      const error = await response.json();
+      displayError(error.message || 'Unknown error occurred');
+    }
+  } catch (err) {
+    displayError('An error occurred while searching for conversations.');
   }
 }
 
-// Function to display search results
+// Function to display the search results
 function displayResults(result) {
   const resultsDiv = document.getElementById('results');
-  resultsDiv.innerHTML = ''; // Clear previous results
+  resultsDiv.innerHTML = '';
 
-  // Check if the result is an object with an error
-  if (result.error) {
-    resultsDiv.innerHTML = `<p>${result.error}</p>`;
-    return;
-  }
+  if (Array.isArray(result)) {
+    if (result.length === 0) resultsDiv.innerHTML = '<p>No results found.</p>';
+    else
+      result.forEach(
+        (item) =>
+          (resultsDiv.innerHTML += `<p>Name:${item.name}, Link:${item.link}</p>`)
+      );
+  } else
+    resultsDiv.innerHTML += `<p>Name:${result.name}, Link:${result.link}</p>`;
+}
 
-  // Display the found conversation
-  const p = document.createElement('p');
-  p.textContent = `Name: ${result.name}, Link: ${result.link}`;
-  resultsDiv.appendChild(p);
+// Function to display error messages
+function displayError(message) {
+  const resultsDiv = document.getElementById('results');
+  resultsDiv.innerHTML = `<p class="error">${message}</p>`;
 }

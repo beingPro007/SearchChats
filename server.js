@@ -7,19 +7,25 @@ dotenv.config({
   path: './env',
 });
 
-
 // Set up CORS
+const allowedOrigins = [
+  'http://localhost:3001/*',
+  'https://chatgpt.com/c/*'
+];
+
 app.use(
   cors({
-    origin: 'https://chatgpt.com', // Replace with the exact origin if needed
+    origin: allowedOrigins,
     methods: ['GET', 'POST', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization'], // Ensure you allow necessary headers
+    allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true,
   })
 );
 
-app.options('*', cors()); // Allow preflight requests
+// Allow preflight requests for all routes
+app.options('*', cors());
 
+// Logging middleware for API requests
 app.use('/api/v1/conversations', (req, res, next) => {
   console.log(`Received ${req.method} request for: ${req.url}`);
   next();
@@ -29,17 +35,22 @@ app.use('/api/v1/conversations', (req, res, next) => {
 dbConnect()
   .then(() => {
     app.on('Error', (error) => {
-      console.log('Error occurred:', error);
+      console.error('Error occurred:', error);
       throw error;
     });
 
-    // Create an HTTPS server using the certificate options
-    app.listen(process.env.PORT || 8000, () => {
-      console.log(
-        `😁  Server is running on https://localhost:${process.env.PORT || 8000}`
-      );
+    // Start the server
+    const port = process.env.PORT || 8000;
+    app.listen(port, () => {
+      console.log(`🚀  Server is running on https://localhost:${port}`);
     });
   })
   .catch((err) => {
-    console.log('MongoDB Connection Failed!!!', err);
+    console.error('MongoDB Connection Failed!!!', err);
   });
+
+// General error handler (optional)
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).send('Something broke!');
+});

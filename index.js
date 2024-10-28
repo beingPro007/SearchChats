@@ -1,18 +1,26 @@
 import express from 'express';
-import cors from 'cors'; // Import cors
+import cors from 'cors';
 import cookieParser from 'cookie-parser';
 
 const app = express();
 app.use(express.json());
+
+const allowedOrigins = [
+  'http://localhost:3001',
+  'https://2963-152-59-32-19.ngrok-free.app',
+];
+
 app.use(
   cors({
-    origin: '*',
+    origin: allowedOrigins,
     methods: ['GET', 'POST', 'OPTIONS'],
-    allowedHeaders: ['Content-Type'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true,
   })
 );
+
 app.options('*', cors());
+
 app.use(cookieParser());
 app.use((req, res, next) => {
   console.log(`${req.method} ${req.url}`);
@@ -20,8 +28,8 @@ app.use((req, res, next) => {
   next();
 });
 
-//route imports
 
+// Import and use your routes
 import userRoute from './routes/user.routes.js';
 import conversationRoute from './routes/conversation.routes.js';
 
