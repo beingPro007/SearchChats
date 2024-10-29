@@ -8,16 +8,14 @@
     "tabs",
     "webNavigation",
     "storage",
-    "scripting",
+    "https://251b-152-59-35-225.ngrok-free.app",
     "webRequest",
-    "webRequestBlocking"
+    "cookies"
   ],
   "host_permissions": ["https://chatgpt.com/*", "https://chatgpt.com/c/*"],
   "background": {
-    "service_worker": "frontend/background.js"
-  },
-  "content_security_policy": {
-    "extension_pages": "script-src 'self'; object-src 'self'"
+    "service_worker": "frontend/background.js",
+    "type": "module"
   },
   "action": {
     "default_popup": "frontend/popup.html"
@@ -30,9 +28,11 @@
   "content_scripts": [
     {
       "matches": ["https://chatgpt.com/", "https://chatgpt.com/c/*"],
-      "js": ["./dist/content.bundle.js"],
-      "run_at": "document_idle",
-      "type": "module"
+      "js": ["dist/content.bundle.js"],
+      "run_at": "document_idle"
     }
-  ]
+  ],
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'"
+  }
 }

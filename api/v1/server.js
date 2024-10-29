@@ -10,7 +10,7 @@ dotenv.config({
 // Set up CORS
 const allowedOrigins = [
   'http://localhost:3001/*',
-  'https://chatgpt.com/c/*'
+  'https://chatgpt.com'
 ];
 
 app.use(

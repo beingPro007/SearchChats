@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Layout from '../components/Layout';
-import { ApiResponse } from '../../../utils/ApiResponse.js'; // Adjust the import path accordingly
+import { ApiResponse } from '../../../api/v1/utils/ApiResponse.js'
 
 export default function Register() {
   const [username, setUsername] = useState('');
@@ -47,7 +47,7 @@ export default function Register() {
 
     try {
       const response = await fetch(
-        'https://16bc-152-59-32-218.ngrok-free.app/api/v1/users/registerUser',
+        'https://529f-157-32-216-101.ngrok-free.app/api/v1/users/registerUser',
         {
           method: 'POST',
           headers: {

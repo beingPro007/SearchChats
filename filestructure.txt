@@ -1,14 +1,36 @@
 |-- .babelrc
-|-- .env
 |-- .eslintrc.js
 |-- .gitignore
 |-- .prettierignore
 |-- .prettierrc
-|-- controllers
-    |-- Conversation.controllers.js
-    |-- User.controllers.js
-|-- db
-    |-- mongoDbIndex.js
+|-- .vercel
+    |-- project.json
+    |-- README.txt
+|-- api
+    |-- v1
+        |-- .env
+        |-- controllers
+            |-- Conversation.controllers.js
+            |-- User.controllers.js
+        |-- db
+            |-- mongoDbIndex.js
+        |-- index.js
+        |-- middlewares
+            |-- verifyJwt.middlewares.js
+        |-- models
+            |-- Conversation.models.js
+            |-- User.models.js
+        |-- package-lock.json
+        |-- package.json
+        |-- routes
+            |-- conversation.routes.js
+            |-- user.routes.js
+        |-- server.js
+        |-- utils
+            |-- ApiErrors.js
+            |-- ApiResponse.js
+            |-- asyncHandler.js
+        |-- vercel.json
 |-- frontend
     |-- authentications
         |-- components
@@ -32,26 +54,8 @@
     |-- icon128.png
     |-- icon16.png
     |-- icon48.png
-|-- index.js
 |-- manifest.json
-|-- middlewares
-    |-- verifyJwt.middlewares.js
-|-- models
-    |-- Conversation.models.js
-    |-- User.models.js
-|-- package-lock.json
-|-- package.json
 |-- postcss.config.js
 |-- README.md
-|-- routes
-    |-- conversation.routes.js
-    |-- user.routes.js
-|-- server
-    |-- server.js
-|-- server.js
 |-- tailwind.config.js
-|-- utils
-    |-- ApiErrors.js
-    |-- ApiResponse.js
-    |-- asyncHandler.js
-|-- webpack.config.js
+|-- webpack.config.mjs

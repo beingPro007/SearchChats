@@ -4,7 +4,7 @@ import { loginUser, registerUser } from '../controllers/User.controllers.js';
 
 const router = Router();
 
-router.route('/registerUser').post(verifyJWT, registerUser)
-router.route('/loginUser').post(verifyJWT, loginUser);
+router.route('/registerUser').post(registerUser)
+router.route('/loginUser').post(loginUser);
 
 export default router;
