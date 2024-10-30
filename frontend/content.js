@@ -20,7 +20,7 @@ const logNavigation = (url) => {
       } else {
         title = requireText;
 
-        const ngrokUrl = 'https://710c-152-59-35-115.ngrok-free.app';
+        const ngrokUrl = 'https://refined-genuinely-husky.ngrok-free.app';
         const data = { title, url };
 
         fetch(`${ngrokUrl}/api/v1/conversations/addConversation`, {

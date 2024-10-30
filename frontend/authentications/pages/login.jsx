@@ -15,7 +15,7 @@ export default function Login() {
 
     try {
       const response = await fetch(
-        'https://529f-157-32-216-101.ngrok-free.app/api/v1/users/loginUser',
+        'https://refined-genuinely-husky.ngrok-free.app/api/v1/users/loginUser',
         {
           method: 'POST',
           credentials: 'include',

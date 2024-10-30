@@ -1,7 +1,7 @@
 // Function to get a specific cookie value by name
 function getCookie(name, callback) {
   chrome.cookies.get(
-    { url: 'http://localhost:3000', name: name },
+    { url: 'https://refined-genuinely-husky.ngrok-free.app', name: name },
     function (cookie) {
       if (cookie) {
         callback(cookie.value);
@@ -16,7 +16,7 @@ function getCookie(name, callback) {
 async function verifyJwt(token) {
   try {
     const response = await fetch(
-      'https://f4b6-152-59-35-141.ngrok-free.app/api/v1/verify-jwt',
+      'https://refined-genuinely-husky.ngrok-free.app/api/v1/verify-jwt',
       {
         method: 'POST',
         headers: {

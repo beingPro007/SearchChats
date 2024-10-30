@@ -7,31 +7,6 @@ dotenv.config({
   path: './env',
 });
 
-// Set up CORS
-const allowedOrigins = [
-  'http://localhost:3001/*',
-  'https://chatgpt.com'
-];
-
-app.use(
-  cors({
-    origin: allowedOrigins,
-    methods: ['GET', 'POST', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
-    credentials: true,
-  })
-);
-
-// Allow preflight requests for all routes
-app.options('*', cors());
-
-// Logging middleware for API requests
-app.use('/api/v1/conversations', (req, res, next) => {
-  console.log(`Received ${req.method} request for: ${req.url}`);
-  next();
-});
-
-// Connect to MongoDB and start the server
 dbConnect()
   .then(() => {
     app.on('Error', (error) => {

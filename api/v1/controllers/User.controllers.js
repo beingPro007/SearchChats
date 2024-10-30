@@ -110,8 +110,9 @@ const loginUser = asyncHandler(async (req, res, next) => {
   const options = {
     httpOnly: true,
     secure: true,
-    sameSite: 'None',
+    sameSite: 'Lax',
     maxAge: 7 * 24 * 60 * 60 * 1000,
+    path: '/'
   };
 
   // Send response with tokens

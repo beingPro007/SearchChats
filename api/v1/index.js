@@ -6,6 +6,7 @@ const app = express();
 app.use(express.json());
 
 const allowedOrigins = [
+  'https://authenticationsfinal.vercel.app',
   'http://localhost:3001',
   'https://chatgpt.com',
 ];

@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', function () {
       } else {
         loginButton.style.display = 'block'; // Show login button if not logged in
         console.error(response.error || 'Login required');
-        window.open('http://localhost:3001/')
+        window.open('https://authenticationsfinal.vercel.app')
       }
     } else {
       console.error('No response received from background script');
@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     try {
       const response = await fetch(
-        `http://localhost:3000/conversations/search?name=${encodeURIComponent(
+        `https://refined-genuinely-husky.ngrok-free.app/conversations/search?name=${encodeURIComponent(
           searchQuery
         )}`
       );
