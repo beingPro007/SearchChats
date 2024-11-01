@@ -2,7 +2,9 @@
   "type": "module",
   "dependencies": {
     "chatgpt-conversation-finder": "file:",
-    "cors": "^2.8.5"
+    "cluster": "^0.7.7",
+    "cors": "^2.8.5",
+    "os": "^0.1.2"
   },
   "name": "chatgpt-conversation-finder",
   "version": "1.0.0",

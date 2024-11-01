@@ -6,29 +6,27 @@ import Fuse from 'fuse.js';
 
 const addConversations = asyncHandler(async (req, res, next) => {
   try {
-    const { title, url, user } = req.body;
 
-    console.log(req.body);
-    console.log(user);
-
-    // Validate User Authentication
-    if (!user || !user.username) {
-      console.log('User is not logged in or user data is missing');
-      return res
-        .status(401)
-        .json(new ApiResponse(401, 'User authentication required', null));
+    const { title, url } = req.body;
+    const user = req.user?.id;
+    if(!user){
+      console.log('User is not logged in!!!')
     }
 
-    // Prevent Disallowed Title or URL
     if (title === 'ChatGPT' || url === 'https://chatgpt.com') {
       return res
         .status(200)
-        .json(new ApiResponse(200, 'Conversation with this title or URL is not allowed', null));
+        .json(
+          new ApiResponse(
+            200,
+            'Conversation with this title or URL is not allowed',
+            null
+          )
+        );
     }
 
-    // Validate Required Fields
+    // Validate required fields
     if (!title || !url) {
-      console.warn('Title and URL are required');
       return res
         .status(400)
         .json(new ApiResponse(400, 'Title and URL are required', null));
@@ -37,19 +35,21 @@ const addConversations = asyncHandler(async (req, res, next) => {
     console.log('Received Title:', title);
     console.log('Received URL:', url);
 
-    // Check for Existing Conversation
     const existedConversation = await Conversation.findOne({
       conversationTitle: title,
     });
-
     if (existedConversation) {
-      console.log('Conversation already exists');
       return res
         .status(200)
-        .json(new ApiResponse(200, 'You already have this conversation!', existedConversation));
+        .json(
+          new ApiResponse(
+            200,
+            'You already have this conversation earlier!',
+            existedConversation
+          )
+        );
     }
-
-    // Create a New Conversation
+    
     const createdConversation = await Conversation.create({
       conversationTitle: title,
       link: url,
@@ -57,18 +57,21 @@ const addConversations = asyncHandler(async (req, res, next) => {
     });
 
     if (!createdConversation) {
-      console.error('Failed to save the conversation');
       return next(new ApiError(500, 'Error saving the conversation'));
     }
 
-    // Successfully Created
-    console.log('Conversation added successfully:', createdConversation);
+    // Successfully created
     res
       .status(201)
-      .json(new ApiResponse(201, 'Conversation added successfully', createdConversation));
-
+      .json(
+        new ApiResponse(
+          201,
+          'Conversation added successfully',
+          createdConversation
+        )
+      );
   } catch (error) {
-    console.error('Error details:', error);
+    console.error('Error details:', error); // Log error details
     next(new ApiError(500, 'Failed to add conversation')); // Pass error to middleware
   }
 });

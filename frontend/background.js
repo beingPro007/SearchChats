@@ -1,21 +1,27 @@
-// Function to get a specific cookie value by name
-function getCookie(name, callback) {
+// Function to get a specific cookie value by name with logging
+function getCookie(name,callback) {
   chrome.cookies.get(
-    { url: 'https://refined-genuinely-husky.ngrok-free.app', name: name },
-    function (cookie) {
-      if (cookie) {
+    {url: 'https://refined-genuinely-husky.ngrok-free.app/',name: name},
+    function(cookie) {
+      if(cookie) {
+        console.log(`Cookie found: ${name} = ${cookie.value}`);
+        chrome.storage.local.set({jwt: cookie.value},() => {
+          console.log('JWT stored successfully in local storage.');
+        });
         callback(cookie.value);
       } else {
-        callback(null); // Return null if cookie not found
+        console.warn(`Cookie ${name} not found.`);
+        callback(null);
       }
     }
   );
 }
 
-// Function to send the token to the server for verification
+// Function to send the accessToken to the server for verification with logging
 async function verifyJwt(token) {
   try {
-    const response = await fetch(
+    console.log('Verifying token:',token);
+    const response=await fetch(
       'https://refined-genuinely-husky.ngrok-free.app/api/v1/verify-jwt',
       {
         method: 'POST',
@@ -26,39 +32,47 @@ async function verifyJwt(token) {
       }
     );
 
-    if (!response.ok) {
-      console.error('Response is not ok:', response.statusText);
-      return { ok: false, error: 'Server responded with an error' };
+    if(!response.ok) {
+      const errorText=await response.text();
+      console.error('Response is not ok:',response.statusText,errorText);
+      return {ok: false,error: 'Server responded with an error'};
     }
 
-    const result = await response.json();
-    return { ok: true, user: result }; // Return user info on success
-  } catch (error) {
-    console.error('Error verifying token:', error);
-    return { ok: false, error: error.message };
+    const result=await response.json();
+    console.log('Token verification success:',result);
+    return {ok: true,user: result.user};
+  } catch(error) {
+    console.error('Error verifying token:',error);
+    return {ok: false,error: error.message};
   }
 }
 
-// Message listener to handle verification requests
-chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-  if (message.action === 'verifyJWT') {
-    // Retrieve the token from cookies using chrome.cookies API
-    getCookie('accessToken', (token) => {
-      if (!token) {
-        sendResponse({ ok: false, error: 'No token found. Please log in.' });
+// Message listener to handle verification requests with added logging
+chrome.runtime.onMessage.addListener((message,sender,sendResponse) => {
+  if(message.action==='verifyJWT') {
+    console.log('Received verifyJWT request');
+
+    getCookie('accessToken',(accessToken) => {
+      if(!accessToken) {
+        console.warn('No accessToken found, redirecting to login');
+        sendResponse({
+          ok: false,
+          error: 'No accessToken found. Please log in.',
+        });
         return;
       }
 
-      // Verify the token if it exists
-      verifyJwt(token)
+      verifyJwt(accessToken)
         .then((result) => {
-          if (result.ok) {
-            sendResponse({ isLoggedIn: true, user: result.user }); // Adjusted response
+          if(result.ok) {
+            console.log('User is logged in:',result.user);
+            sendResponse({isLoggedIn: true,user: result.user});
           } else {
-            sendResponse({ isLoggedIn: false, error: result.error });
+            console.error('Token verification failed:',result.error);
+            sendResponse({isLoggedIn: false,error: result.error});
           }
         })
-        .catch((error) => sendResponse({ ok: false, error: error.message }));
+        .catch((error) => sendResponse({ok: false,error: error.message}));
 
       return true; // Keeps the message channel open for async response
     });
@@ -66,3 +80,4 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     return true; // Keeps the message channel open for async response
   }
 });
+

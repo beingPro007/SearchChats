@@ -9,9 +9,14 @@
     "webNavigation",
     "storage",
     "webRequest",
-    "cookies"
+    "cookies",
+    "scripting",
+    "https://refined-genuinely-husky.ngrok-free.app/",
+    "https://authenticationsfinal.vercel.app/",
+    "nativeMessaging"
   ],
-  "host_permissions": ["https://chatgpt.com/*", "https://chatgpt.com/c/*"],
+  "host_permissions": ["https://chatgpt.com/*", "https://chatgpt.com/c/*", "https://refined-genuinely-husky.ngrok-free.app/",
+    "https://authenticationsfinal.vercel.app/"],
   "background": {
     "service_worker": "frontend/background.js",
     "type": "module"
@@ -27,7 +32,7 @@
   "content_scripts": [
     {
       "matches": ["https://chatgpt.com/", "https://chatgpt.com/c/*"],
-      "js": ["/dist/content.bundle.js"],
+      "js": ["/frontend/content.js"],
       "run_at": "document_idle"
     }
   ],

@@ -10,12 +10,13 @@ const conversationSchema = new Schema(
     },
     link: {
       type: String,
-      required: [true, 'Link is required'], // Custom error message for required field
+      required: [true, 'Link is required'],
       trim: true,
     },
     addedBy: {
       type: mongoose.Types.ObjectId,
-      ref: 'User', // Ensure that each conversation is tied to a user
+      ref: 'User',
+      required: [true, 'First login to save your conversationsco']
     },
   },
   { timestamps: true }

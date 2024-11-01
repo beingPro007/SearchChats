@@ -100,7 +100,6 @@ const loginUser = asyncHandler(async (req, res, next) => {
 
   // Generate tokens if credentials are correct
   const { accessToken, refreshToken } = await generateAccessAndRefreshToken(user._id);
-  console.log({accessToken, refreshToken});
   
   const loggedInUser = await User.findById(user._id).select(
     '-password -refreshToken'
@@ -110,12 +109,11 @@ const loginUser = asyncHandler(async (req, res, next) => {
   const options = {
     httpOnly: true,
     secure: true,
-    sameSite: 'Lax',
+    sameSite: 'None',
     maxAge: 7 * 24 * 60 * 60 * 1000,
-    path: '/'
+    path: '/',
   };
 
-  // Send response with tokens
   return res
     .status(200)
     .cookie('accessToken', accessToken, options)

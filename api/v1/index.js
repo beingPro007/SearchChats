@@ -23,12 +23,6 @@ app.use(
 app.options('*', cors());
 
 app.use(cookieParser());
-app.use((req, res, next) => {
-  console.log(`${req.method} ${req.url}`);
-  console.log('Request headers:', req.headers);
-  next();
-});
-
 
 // Import and use your routes
 import userRoute from './routes/user.routes.js';
@@ -38,6 +32,6 @@ import { verifyJWT } from './middlewares/verifyJwt.middlewares.js';
 app.use('/api/v1/users', userRoute);
 app.use('/api/v1/conversations', conversationRoute);
 
-app.use('/api/v1/verify-jwt', verifyJWT)
+app.post('/api/v1/verify-jwt', verifyJWT);
 
 export { app };

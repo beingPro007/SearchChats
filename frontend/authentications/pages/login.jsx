@@ -34,7 +34,6 @@ export default function Login() {
           message: data.message,
           statuscode: 200,
         });
-        window.close();
       } else {
         // Display error from the backend response
         setNotification({
