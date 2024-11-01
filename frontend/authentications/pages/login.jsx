@@ -22,13 +22,12 @@ export default function Login() {
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ email, password }), // Send email and password only
+          body: JSON.stringify({ email, password }),
         }
       );
 
       const data = await response.json();
 
-      // Check if the response is successful
       if (response.ok) {
         setNotification({
           message: data.message,

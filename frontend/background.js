@@ -1,4 +1,4 @@
-// Function to get a specific cookie value by name with logging
+
 function getCookie(name,callback) {
   chrome.cookies.get(
     {url: 'https://refined-genuinely-husky.ngrok-free.app/',name: name},
@@ -74,10 +74,10 @@ chrome.runtime.onMessage.addListener((message,sender,sendResponse) => {
         })
         .catch((error) => sendResponse({ok: false,error: error.message}));
 
-      return true; // Keeps the message channel open for async response
+      return true;
     });
 
-    return true; // Keeps the message channel open for async response
+    return true;
   }
 });
 
