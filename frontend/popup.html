@@ -6,102 +6,127 @@
     <title>Conversation Finder</title>
     <style>
         :root {
-            --primary-color: #61dafb;
-            --secondary-color: #bb86fc;
-            --background-color: #121212;
-            --card-background: #1e1e1e;
-            --text-color: #ffffff;
-            --input-background: #2c2c2c;
-            --error-color: #cf6679;
-            --success-color: #03dac6;
+            --primary-color: #6366f1;
+            --primary-hover: #4f46e5;
+            --secondary-color: #8b5cf6;
+            --background-color: #0f172a;
+            --card-background: #1e293b;
+            --text-color: #f1f5f9;
+            --text-muted: #94a3b8;
+            --input-background: #334155;
+            --error-color: #ef4444;
+            --success-color: #10b981;
+            --card-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         body {
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 10vh;
+            min-height: 60vh;
             margin: 0;
-            padding: 10px;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--background-color);
+            padding: 20px;
+            font-family: system-ui, -apple-system, sans-serif;
+            background: linear-gradient(135deg, var(--background-color), #1e1b4b);
             color: var(--text-color);
+            line-height: 1.5;
         }
 
         .card {
-            width: 400px;
+            width: 1000px;
             background-color: var(--card-background);
-            border-radius: 20px;
-            padding: 10px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border-radius: 24px;
+            padding: 24px 32px;
+            box-shadow: var(--card-shadow);
             text-align: center;
-            animation: fadeIn 0.5s ease-in-out;
+            animation: fadeIn 0.6s ease-out;
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         h3 {
-            color: var(--primary-color);
-            font-size: 28px;
-            margin-bottom: 10px;
-            font-weight: 600;
+            color: var(--text-color);
+            font-size: 24px;
+            margin: 0 0 20px 0;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.5px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         #username {
-            font-size: 14px;
-            margin-bottom: 20px;
-            padding: 8px 15px;
-            background-color: var(--input-background);
-            border-radius: 20px;
+            font-size: 15px;
+            padding: 6px 16px;
+            background-color: rgba(99, 102, 241, 0.1);
+            border-radius: 12px;
             color: var(--primary-color);
             font-weight: 600;
-            display: inline-block;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 16px;
         }
 
         .input-group {
             display: flex;
             align-items: center;
-            gap: 10px;
-            margin-top: 25px;
+            gap: 12px;
+            margin-top: 16px;
+            max-width: 100%;
         }
 
         .input-wrapper {
             flex: 1;
             display: flex;
-            border-radius: 25px;
+            border-radius: 16px;
             overflow: hidden;
             position: relative;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            transition: var(--transition);
+            border: 2px solid transparent;
+        }
+
+        .input-wrapper:focus-within {
+            border-color: var(--primary-color);
         }
 
         input[type="text"] {
             width: 100%;
-            padding: 15px 20px;
+            padding: 12px 16px;
             border: none;
             outline: none;
-            font-size: 16px;
+            font-size: 15px;
             background-color: var(--input-background);
             color: var(--text-color);
-            transition: all 0.3s ease;
+            transition: var(--transition);
         }
 
-        input[type="text"]:focus {
-            box-shadow: 0 0 0 2px var(--primary-color);
+        input[type="text"]::placeholder {
+            color: var(--text-muted);
         }
 
         button {
-            padding: 15px 25px;
+            padding: 12px 24px;
             background-color: var(--primary-color);
-            color: var(--background-color);
+            color: white;
             border: none;
-            border-radius: 25px;
-            font-size: 16px;
+            border-radius: 12px;
+            font-size: 15px;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 2px 10px rgba(97, 218, 251, 0.3);
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            height: 42px;
+            white-space: nowrap;
         }
 
         button:hover {
-            background-color: #4fa8c7;
+            background-color: var(--primary-hover);
             transform: translateY(-2px);
         }
 
@@ -110,47 +135,104 @@
         }
 
         #results {
-            margin-top: 30px;
-            padding: 20px;
+            margin-top: 20px;
+            padding: 16px;
             background-color: var(--input-background);
-            border-radius: 15px;
+            border-radius: 16px;
             max-height: 200px;
             overflow-y: auto;
             text-align: left;
+            border: 1px solid rgba(255, 255, 255, 0.05);
         }
 
         #results p {
-            padding: 12px 15px;
-            background-color: var(--card-background);
-            border-radius: 10px;
-            margin-bottom: 10px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-            transition: all 0.3s ease;
+            padding: 12px;
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            margin-bottom: 8px;
+            transition: var(--transition);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            cursor: pointer;
         }
 
         #results p:hover {
             transform: translateY(-2px);
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            background-color: rgba(255, 255, 255, 0.08);
         }
 
         .error {
             color: var(--error-color);
             font-size: 14px;
-            margin-top: 15px;
+            margin-top: 12px;
+            padding: 8px;
+            background-color: rgba(239, 68, 68, 0.1);
+            border-radius: 12px;
         }
 
         .loading-spinner {
             display: none;
-            width: 24px;
-            height: 24px;
-            border: 3px solid var(--input-background);
-            border-top: 3px solid var(--primary-color);
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(99, 102, 241, 0.1);
+            border-top: 2px solid var(--primary-color);
             border-radius: 50%;
             position: absolute;
-            right: 15px;
+            right: 16px;
             top: 50%;
             transform: translateY(-50%);
-            animation: spin 1s linear infinite;
+            animation: spin 0.8s linear infinite;
+        }
+
+        .login-button,
+        .logout-button {
+            width: auto;
+            min-width: 120px;
+            padding: 12px 24px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border: none;
+            border-radius: 12px;
+            margin: 8px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+        }
+
+        .login-button:hover,
+        .logout-button:hover {
+            transform: translateY(-2px);
+            filter: brightness(1.1);
+        }
+
+        .user-status {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            position: relative;
+        }
+
+        .status-dot.online {
+            background-color: var(--success-color);
+            box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.1);
+        }
+
+        .status-dot.offline {
+            background-color: var(--error-color);
+            box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.1);
+        }
+
+        .hidden {
+            display: none;
         }
 
         @keyframes spin {
@@ -159,74 +241,48 @@
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+                filter: blur(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+                filter: blur(0);
+            }
         }
 
-        .login-button,
-        .logout-button {
-            width: 100%;
-            font-size: 16px;
-            padding: 15px;
-            background-color: var(--secondary-color);
-            color: var(--background-color);
-            border: none;
-            border-radius: 25px;
-            margin-top: 20px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 2px 10px rgba(187, 134, 252, 0.3);
-        }
-
-        .login-button:hover,
-        .logout-button:hover {
-            background-color: #a56ef5;
-            transform: translateY(-2px);
-        }
-
-        .hidden {
-            display: none;
-        }
-
-        .user-status {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 20px;
-        }
-
-        .status-dot {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            margin-right: 8px;
-        }
-
-        .status-dot.online {
-            background-color: var(--success-color);
-        }
-
-        .status-dot.offline {
-            background-color: var(--error-color);
-        }
-
-        /* Custom scrollbar for Webkit browsers */
         ::-webkit-scrollbar {
-            width: 8px;
+            width: 6px;
         }
 
         ::-webkit-scrollbar-track {
-            background: var(--input-background);
-            border-radius: 4px;
+            background: transparent;
         }
 
         ::-webkit-scrollbar-thumb {
             background: var(--primary-color);
-            border-radius: 4px;
+            border-radius: 3px;
         }
 
         ::-webkit-scrollbar-thumb:hover {
-            background: #4fa8c7;
+            background: var(--primary-hover);
+        }
+
+        @media (max-width: 1040px) {
+            .card {
+                width: 100%;
+                padding: 20px;
+            }
+
+            .input-group {
+                flex-direction: column;
+            }
+
+            button {
+                width: 100%;
+            }
         }
     </style>
 </head>
@@ -234,19 +290,23 @@
     <div class="card">
         <h3>Conversation Finder</h3>
 
-        <div class="user-status hidden" id="userStatus">
+        <div class="user-status hidden" id="username">
             <span class="status-dot" id="statusDot"></span>
             <div id="username">Username</div>
         </div>
 
-        <button class="login-button" id="loginButton">Login</button>
-        <button class="logout-button" id="logoutButton">Logout</button>
+        <button class="login-button" id="loginButton">
+            Sign In
+        </button>
+        <button class="logout-button" id="logoutButton">
+            Sign Out
+        </button>
 
         <div class="input-group">
             <div class="input-wrapper">
                 <input
                     type="text"
-                    placeholder="Enter conversation name..."
+                    placeholder="Search conversations..."
                     id="searchQuery"
                     aria-label="Search conversations"
                 />

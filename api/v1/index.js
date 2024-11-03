@@ -9,6 +9,8 @@ const allowedOrigins=[
   'https://authenticationsfinal.vercel.app',
   'http://localhost:3001',
   'https://chatgpt.com',
+  'https://authenticationsfinal-d0p56bt0v-gautam-ranas-projects.vercel.app',
+  'https://authenticationsfinal-pycru6zfl-gautam-ranas-projects.vercel.app'
 ];
 
 app.use(

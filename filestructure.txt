@@ -24,6 +24,7 @@
             |-- mongoDbIndex.js
         |-- index.js
         |-- middlewares
+            |-- verifyJWT.conversations.middleware.js
             |-- verifyJwt.middlewares.js
         |-- models
             |-- Conversation.models.js
@@ -50,9 +51,12 @@
         |-- package-lock.json
         |-- package.json
         |-- pages
+            |-- forgot-password.jsx
             |-- index.jsx
             |-- login.jsx
             |-- register.jsx
+            |-- reset-password.jsx
+            |-- thank-you.jsx
             |-- _app.jsx
         |-- postcss.config.js
         |-- styles

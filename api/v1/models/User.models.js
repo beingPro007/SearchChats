@@ -1,8 +1,8 @@
-import mongoose, { Schema } from 'mongoose';
+import mongoose,{Schema} from 'mongoose';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 
-const userSchema = new Schema(
+const userSchema=new Schema(
   {
     username: {
       type: String,
@@ -10,8 +10,8 @@ const userSchema = new Schema(
       index: true,
       trim: true,
       unique: true, // Ensure usernames are unique
-      minlength: [3, 'Username must be at least 3 characters long'],
-      maxlength: [15, 'Username cannot exceed 15 characters'],
+      minlength: [3,'Username must be at least 3 characters long'],
+      maxlength: [15,'Username cannot exceed 15 characters'],
     },
     fullName: {
       type: String,
@@ -19,9 +19,9 @@ const userSchema = new Schema(
     },
     password: {
       type: String,
-      required: [true, 'Password is required!'],
-      minLength: [8, 'Password must be at least 8 characters long'],
-      maxLength: [20, 'Password cannot exceed 20 characters'],
+      required: [true,'Password is required!'],
+      minLength: [8,'Password must be at least 8 characters long'],
+      maxLength: [20,'Password cannot exceed 20 characters'],
     },
     email: {
       type: String,
@@ -29,26 +29,36 @@ const userSchema = new Schema(
       lowercase: true,
       unique: true,
       trim: true,
-      match: [/.+@.+\..+/, 'Please fill a valid email address'],
+      match: [/.+@.+\..+/,'Please fill a valid email address'],
     },
+    resetPasswordToken: {
+      type: String,
+      required: false,
+      unique: true,
+    },
+    resetPasswordExpires: {
+      type: Date,
+      required: false,
+      unique: true,
+    }
   },
-  { timestamps: true }
+  {timestamps: true}
 );
 
 // Pre-save hook for password hashing
-userSchema.pre('save', async function (next) {
-  if (!this.isModified('password')) return next();
-  this.password = await bcrypt.hash(this.password, 10); // Use a reasonable number of salt rounds
+userSchema.pre('save',async function(next) {
+  if(!this.isModified('password')) return next();
+  this.password=await bcrypt.hash(this.password,10);
   next();
 });
 
 // Method to compare passwords
-userSchema.methods.isPasswordCorrect = async function (password) {
-  return await bcrypt.compare(password, this.password);
+userSchema.methods.isPasswordCorrect=async function(password) {
+  return await bcrypt.compare(password,this.password);
 };
 
 // Method to generate access tokens
-userSchema.methods.generateAccessToken = function () {
+userSchema.methods.generateAccessToken=function() {
   try {
     return jwt.sign(
       {
@@ -62,13 +72,13 @@ userSchema.methods.generateAccessToken = function () {
         expiresIn: process.env.ACCESS_TOKEN_SECRET_KEY_EXPIRY,
       }
     );
-  } catch (error) {
-    console.error('Error generating acces token', error);
+  } catch(error) {
+    console.error('Error generating acces token',error);
   }
 };
 
 // Method to generate refresh tokens
-userSchema.methods.generateRefreshToken = function () {
+userSchema.methods.generateRefreshToken=function() {
   try {
     return jwt.sign(
       {
@@ -79,11 +89,11 @@ userSchema.methods.generateRefreshToken = function () {
         expiresIn: process.env.REFRESH_TOKEN_SECRET_KEY_EXPIRY,
       }
     );
-  } catch (error) {
-    console.error('Error generating the refreshToken', error);
-    
+  } catch(error) {
+    console.error('Error generating the refreshToken',error);
+
   }
 };
 
 // Export the User model
-export const User = mongoose.model('User', userSchema);
+export const User=mongoose.model('User',userSchema);

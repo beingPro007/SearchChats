@@ -2,6 +2,8 @@ import {User} from '../models/User.models.js';
 import {asyncHandler} from '../utils/asyncHandler.js';
 import {ApiResponse} from '../utils/ApiResponse.js';
 import {ApiError} from '../utils/ApiErrors.js';
+import crypto from 'crypto';
+import nodemailer from 'nodemailer'
 
 const generateAccessAndRefreshToken=async (userId) => {
   try {
@@ -162,5 +164,117 @@ const logoutUser=asyncHandler(async (req,res) => {
   }
 
 })
+const forgotPassword=asyncHandler(async (req,res) => {
+  const email=req.body.email
+  console.log(req.body);
 
-export {registerUser,loginUser,logoutUser};
+  if(!email) {
+    throw new ApiError(400,"Email is required!!!");
+  }
+
+  const user=await User.findOne({email: email});
+
+  console.log(user);
+
+  if(!user) {
+    throw new ApiError(400,"User not exists, use another email!!!");
+  }
+  console.log('I am here');
+
+
+  const token=crypto.randomBytes(32).toString('hex');
+
+  console.log('i am hee');
+
+  try {
+    if(!token) {
+      throw new ApiError(400,"Token generation failed!!!");
+    }
+    console.log('I am here');
+
+    user.resetPasswordToken=token;
+    user.resetPasswordExpires=Date.now()+3600000;
+
+    console.log({token: user.resetPasswordToken,expiry: user.resetPasswordExpires});
+
+    await user.save({validateBeforeSave: false});
+    console.log("Email User:",process.env.EMAIL_USER);
+    console.log("Email Pass length:",process.env.EMAIL_PASS)
+
+    const transporter=nodemailer.createTransport({
+      service: 'gmail', // or any other email provider
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS
+      }
+    });
+
+    const resetLink=`https://authenticationsfinal-pycru6zfl-gautam-ranas-projects.vercel.app/reset-password?token=${token}`;
+
+    const mailOptions={
+      to: user.email,
+      subject: 'Password Reset Request for Your Account',
+      html: `
+        <div style="font-family: Arial, sans-serif; color: #333; line-height: 1.6;">
+          <h2 style="color: #4CAF50;">Password Reset Request</h2>
+          <p>Hi ${user.name||''},</p>
+          <p>We received a request to reset the password associated with this email address. If you made this request, please click the button below to reset your password:</p>
+          <div style="text-align: center; margin: 20px 0;">
+            <a href="${resetLink}" style="background-color: #4CAF50; color: #ffffff; text-decoration: none; padding: 10px 20px; border-radius: 5px; display: inline-block;">
+              Reset Password
+            </a>
+          </div>
+          <p>If the button above doesn’t work, you can also copy and paste this link into your browser:</p>
+          <p><a href="${resetLink}" style="color: #4CAF50;">${resetLink}</a></p>
+          <p>If you didn’t request a password reset, please ignore this email. Your password will remain unchanged.</p>
+          <p>Best regards,</p>
+          <p>The Search Chat Team</p>
+          <hr>
+          <small style="color: #888;">If you have any questions, please contact our support team at support@yourcompany.com</small>
+        </div>
+      `
+    };
+
+
+    const transported=await transporter.sendMail(mailOptions);
+
+    if(!transported) {
+      throw new ApiError(400,'Transportation Unsuccessful!!!');
+    }
+
+    console.log(transported);
+
+    return res.status(200).json({status: 200,message: "Password reset link sent successfully!"});
+  } catch(error) {
+    console.log("Something went wrong!!!",error);
+    throw new ApiError(500,"Internal Server Error");
+  }
+});
+
+const resetPassword=asyncHandler(async (req,res) => {
+  const token=req.body.token;
+  console.log(token);
+
+  const newPassword=req.body.newPassword;
+
+  const user=await User.findOne({
+    resetPasswordToken: token,
+    resetPasswordExpires: {$gt: Date.now()}
+  });
+
+  console.log(user);
+
+  if(!user) {
+    return res.status(400).json({message: 'Invalid or expired token'});
+  }
+
+  user.password=newPassword; // Ensure password hashing happens here
+  user.resetPasswordToken=undefined;
+  user.resetPasswordExpires=undefined;
+
+  await user.save({validateBeforeSave: false});
+
+  return res.status(200).json({status: 200,message: "Password changed successfully!!!"});
+});
+
+export {registerUser,loginUser,logoutUser,forgotPassword,resetPassword};
