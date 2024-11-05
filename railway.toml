@@ -1,21 +1,21 @@
+# railway.toml
+
 [project]
 name = "Search Chats"
 
-[services]
-  [[services]]
-  name = "api-service"
-  # Set the root directory to `api/v1`
-  root_directory = "api/v1"
+# Define a single service array
+[[services]]
+name = "api-service"
+root_directory = "api/v1"
   
-  [services.env]
-  # Add environment variables here, e.g.
-  NODE_ENV = "production"
-  PORT = "3000"  # Port that Railway should expose
-
-  [services.build]
-  # Commands to build your backend code if required (e.g., transpile or setup)
-  build_command = "npm install && npm run build"
+# Environment variables for this service
+[services.env]
+NODE_ENV = "production"
+PORT = "3000"  # Replace with the port Railway uses or your application's port
   
-  [services.deploy]
-  # Command to start your backend service
-  start_command = "npm start"  # or replace with `npm run dev` if appropriate
+# Build and deploy commands
+[services.build]
+build_command = "npm install && npm run build"
+  
+[services.deploy]
+start_command = "npm run dev"
