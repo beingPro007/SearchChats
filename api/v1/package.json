@@ -52,6 +52,7 @@
     "dev": "nodemon -r dotenv/config server.js",
     "tunnel": "ngrok http --url=refined-genuinely-husky.ngrok-free.app 3000",
     "build": "webpack"
+    "start": "nodemon -r dotenv/config server.js"
   },
   "keywords": [],
   "author": "",
