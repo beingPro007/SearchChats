@@ -31,6 +31,10 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon -r dotenv/config server.js",
     "tunnel": "ngrok http --url=refined-genuinely-husky.ngrok-free.app 3000",
+<<<<<<< HEAD
+=======
+    "build": "webpack",
+>>>>>>> 6e16d586dc99f62350573353dcca98daf2c472f3
     "start": "nodemon -r dotenv/config server.js"
   },
   "keywords": [],
