@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded',function() {
             const searchQuery=searchQueryTextField.value;
 
             try {
-              const fetchedSearchResponse=await fetch("https://refined-genuinely-husky.ngrok-free.app/api/v1/conversations/findConversations",{
+              const fetchedSearchResponse=await fetch("https://searchchats-backend-1060514353958.us-central1.run.app/api/v1/conversations/findConversations",{
                 method: 'POST',
                 headers: {
                   'Content-Type': 'application/json'
@@ -52,7 +52,7 @@ document.addEventListener('DOMContentLoaded',function() {
         if(logoutButton) {
           document.getElementById('logoutButton').addEventListener('click',async () => {
             try {
-              const logoutResponse=await fetch('https://refined-genuinely-husky.ngrok-free.app/api/v1/users/logoutUser',{
+              const logoutResponse = await fetch('https://searchchats-backend-1060514353958.us-central1.run.app/api/v1/users/logoutUser',{
                 method: 'POST',
                 headers: {
                   'Content-Type': 'application/json'

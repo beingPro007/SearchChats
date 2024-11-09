@@ -1,7 +1,7 @@
 
 function getCookie(name,callback) {
   chrome.cookies.get(
-    {url: 'https://refined-genuinely-husky.ngrok-free.app/',name: name},
+    {url: 'https://searchchats-backend-1060514353958.us-central1.run.app/',name: name},
     function(cookie) {
       if(cookie) {
         console.log(`Cookie found: ${name} = ${cookie.value}`);
@@ -22,7 +22,7 @@ async function verifyJwt(token) {
   try {
     console.log('Verifying token:',token);
     const response=await fetch(
-      'https://refined-genuinely-husky.ngrok-free.app/api/v1/verify-jwt',
+      'https://searchchats-backend-1060514353958.us-central1.run.app/api/v1/verify-jwt',
       {
         method: 'POST',
         headers: {
@@ -76,7 +76,6 @@ chrome.runtime.onMessage.addListener((message,sender,sendResponse) => {
 
       return true;
     });
-
     return true;
   }
 });

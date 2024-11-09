@@ -15,8 +15,8 @@
     "https://authenticationsfinal.vercel.app/",
     "nativeMessaging"
   ],
-  "host_permissions": ["https://chatgpt.com/*", "https://chatgpt.com/c/*", "https://refined-genuinely-husky.ngrok-free.app/",
-    "https://authenticationsfinal.vercel.app/"],
+  "host_permissions": ["https://chatgpt.com/*", "https://chatgpt.com/c/*",
+    "https://authenticationsfinal.vercel.app/", "https://searchchats-backend-1060514353958.us-central1.run.app/"],
   "background": {
     "service_worker": "frontend/background.js",
     "type": "module"

@@ -166,7 +166,6 @@ const logoutUser=asyncHandler(async (req,res) => {
 })
 const forgotPassword=asyncHandler(async (req,res) => {
   const email=req.body.email
-  console.log(req.body);
 
   if(!email) {
     throw new ApiError(400,"Email is required!!!");
@@ -174,32 +173,21 @@ const forgotPassword=asyncHandler(async (req,res) => {
 
   const user=await User.findOne({email: email});
 
-  console.log(user);
-
   if(!user) {
-    throw new ApiError(400,"User not exists, use another email!!!");
+    return res.status(400,new ApiResponse(400,"User not exists, use another email!!!"));
   }
-  console.log('I am here');
-
 
   const token=crypto.randomBytes(32).toString('hex');
 
-  console.log('i am hee');
-
   try {
     if(!token) {
-      throw new ApiError(400,"Token generation failed!!!");
+      return res.status(400,new ApiResponse(400,"Token generation failed!!!"));
     }
-    console.log('I am here');
 
     user.resetPasswordToken=token;
     user.resetPasswordExpires=Date.now()+3600000;
 
-    console.log({token: user.resetPasswordToken,expiry: user.resetPasswordExpires});
-
     await user.save({validateBeforeSave: false});
-    console.log("Email User:",process.env.EMAIL_USER);
-    console.log("Email Pass length:",process.env.EMAIL_PASS)
 
     const transporter=nodemailer.createTransport({
       service: 'gmail', // or any other email provider
@@ -209,7 +197,7 @@ const forgotPassword=asyncHandler(async (req,res) => {
       }
     });
 
-    const resetLink=`https://authenticationsfinal-pycru6zfl-gautam-ranas-projects.vercel.app/reset-password?token=${token}`;
+    const resetLink=`https://authenticationsfinal.vercel.app/reset-password?token=${token}`;
 
     const mailOptions={
       to: user.email,

@@ -47,7 +47,7 @@ export default function Register() {
 
     try {
       const response = await fetch(
-        'https://refined-genuinely-husky.ngrok-free.app/api/v1/users/registerUser',
+        'https://searchchats-backend-1060514353958.us-central1.run.app/api/v1/users/registerUser',
         {
           method: 'POST',
           headers: {

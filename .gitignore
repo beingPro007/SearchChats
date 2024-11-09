@@ -139,3 +139,4 @@ dist
 # SvelteKit build / generate output
 .svelte-kit
 .vercel
+api/v1/app.yaml

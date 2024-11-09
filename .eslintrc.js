@@ -13,6 +13,6 @@ export default {
     sourceType: 'module',
   },
   rules: {
-    'no-eval': 'error', // Disallow the use of eval
+    'no-eval': 'error',
   },
 };

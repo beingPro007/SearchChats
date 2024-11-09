@@ -23,7 +23,7 @@ const logNavigation=(url) => {
         chrome.runtime.sendMessage({action: 'verifyJWT'},async (authResponse) => {
           if(authResponse.isLoggedIn) {
             try {
-              const backendResponse=await fetch("https://refined-genuinely-husky.ngrok-free.app/api/v1/conversations/addConversation",{
+              const backendResponse = await fetch("https://searchchats-backend-1060514353958.us-central1.run.app/api/v1/conversations/addConversation",{
                 method: 'POST',
                 headers: {
                   'Content-Type': "application/json",

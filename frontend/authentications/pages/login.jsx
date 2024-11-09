@@ -15,7 +15,7 @@ export default function Login() {
 
     try {
       const response = await fetch(
-        'https://refined-genuinely-husky.ngrok-free.app/api/v1/users/loginUser',
+        'https://searchchats-backend-1060514353958.us-central1.run.app/api/v1/users/loginUser',
         {
           method: 'POST',
           credentials: 'include',
