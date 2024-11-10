@@ -1,0 +1,10 @@
+#This is a copy of the .env file which is just a demo in your contribution file you need to create a .env file which must look like this
+ACCESS_TOKEN_SECRET_KEY=<Your Access Token Secret Key>
+REFRESH_TOKEN_SECRET_KEY=<Your Refresh Token Secret Key>
+ACCESS_TOKEN_SECRET_KEY_EXPIRY=<Your ACCESS_TOKEN_SECRET_KEY_EXPIRY>
+REFRESH_TOKEN_SECRET_KEY_EXPIRY=<Your REFRESH_TOKEN_SECRET_KEY_EXPIRY>
+MONGODB_URI=<Your MONGODB_URI>
+PORT=<Your PORT>
+DB_NAME=<Your DB_NAME>
+EMAIL_USER=<Your Nodemailer Mail Sending EMAIL_ID>
+EMAIL_PASS=<Your Nodemailer app Pass>
